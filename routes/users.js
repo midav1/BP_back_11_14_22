@@ -27,12 +27,14 @@ router.get("/myInfo", auth, async(req, res) => {
     }
 })
 router.patch("/myInfo/edit", auth, async(req, res) => {
+     //let userInfo = await UserModel.findOne({ _id: req.tokenData._id }, { password: 0 });
     // let validBody = validateUser(req.body);
     // if (validBody.error) {
     //     res.status(400).json(validBody.error.details)
     // }
     try {
-        let data = await UserModel.updateOne({ _id: req.tokenData._id }, { name: req.body.name });
+       
+        let data = await UserModel.findOneAndUpdate({ _id: req.tokenData._id }, { $set: req.body }, { new: true });
         res.json(data);
     } catch (err) {
         console.log(err)
