@@ -19,7 +19,7 @@ router.get("/" , async(req,res)=> {
   }
   catch(err){
     console.log(err);
-    res.status(500).json({msg:"there error try again later",err})
+    res.status(500).json({msg:"there errorr try again later",err})
   }
 })
 router.get("/myitems",auth,async(req,res) => {
