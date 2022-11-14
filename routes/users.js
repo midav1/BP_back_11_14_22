@@ -26,6 +26,19 @@ router.get("/myInfo", auth, async(req, res) => {
         res.status(500).json({ msg: "err", err })
     }
 })
+router.patch("/myInfo/edit", auth, async(req, res) => {
+    // let validBody = validateUser(req.body);
+    // if (validBody.error) {
+    //     res.status(400).json(validBody.error.details)
+    // }
+    try {
+        let data = await UserModel.updateOne({ _id: req.tokenData._id }, { name: req.body.name });
+        res.json(data);
+    } catch (err) {
+        console.log(err)
+        res.status(500).json({ msg: "err", err })
+    }
+})
 
 // רק משתמש אדמין יוכל להגיע ולהציג את רשימת 
 // כל המשתמשים

@@ -19,7 +19,25 @@ router.get("/" , async(req,res)=> {
   }
   catch(err){
     console.log(err);
-    res.status(500).json({msg:"there error try again later",err})
+    res.status(500).json({msg:"there erorr try again later",err})
+  }
+})
+router.get("/myitems",auth,async(req,res) => {
+  let perPage = req.query.perPage || 5;
+  let page = req.query.page || 1;
+  let sort = req.query.sort || "_id";
+  let reverse = req.query.reverse == "yes" ? 1 : -1;
+  try{
+    let data = await FoodModel.find({user_id:req.tokenData._id})
+    .limit(perPage)
+    .skip((page - 1) * perPage)
+    // .sort({_id:-1}) like -> order by _id DESC
+    .sort({[sort]:reverse})
+    res.json(data);
+  }
+  catch(err){
+    console.log(err)
+    res.status(500).json({msg:"err",err})
   }
 })
 
