@@ -30,8 +30,14 @@ router.get("/byId/:id", async(req, res) => {
     }
 })
 
-router.put("/:idEdit", authAdmin, async(req, res) => {
+router.patch("/:idEdit", authAdmin, async(req, res) => {
+  
+  
+  
+  
+  
     let validBody = validateCategory(req.body);
+    console.log(req.body)
     if (validBody.error) {
         res.status(400).json(validBody.error.details)
     }
