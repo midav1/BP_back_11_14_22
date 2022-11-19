@@ -161,3 +161,27 @@ router.patch("/changeActive/:userID", authAdmin, async(req, res) => {
 })
 
 module.exports = router;
+router.patch("/changepassword", auth, async(req, res) => {
+    try {
+        // קודם כל לבדוק אם המייל שנשלח קיים  במסד
+        let user = await UserModel.findOne({ email: req.body.email })
+        if (!user) {
+            return res.status(401).json({ msg: "Password or email is worng ,code:1" })
+        }
+        // אם הסיסמא שנשלחה בבאדי מתאימה לסיסמא המוצפנת במסד של אותו משתמש
+        let authPassword = await bcrypt.compare(req.body.password,user.password);
+        if (!authPassword) {
+            return res.status(401).json({ msg: "Password or email is worng ,code:2" });
+        }
+        // מייצרים טוקן לפי שמכיל את האיידי של המשתמש
+        user.password= await bcrypt.hash(req.body.newpassword, 10);
+        await user.save();
+        res.json({ msg: "password changed  successfully"});
+        
+    } catch (err) {
+        console.log(err)
+        res.status(500).json({ msg: "err", err })
+    }
+})
+
+module.exports = router;
