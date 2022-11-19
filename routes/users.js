@@ -36,7 +36,6 @@ router.patch("/myInfo/edit", auth, async(req, res) => {
     delete req.body.data_created;
     delete req.body.active;
     try {
-       
         let data = await UserModel.findOneAndUpdate({ _id: req.tokenData._id }, { $set: req.body });
         res.json(data);
     } catch (err) {
@@ -166,7 +165,9 @@ router.patch("/changeActive/:userID", authAdmin, async(req, res) => {
 })
 
 module.exports = router;
-router.patch("/changePassword", auth, async(req, res) => {
+
+router.patch("/changepassword", auth, async(req, res) => {
+
     try {
         // קודם כל לבדוק אם המייל שנשלח קיים  במסד
         let user = await UserModel.findOne({ email: req.body.email })
@@ -180,7 +181,7 @@ router.patch("/changePassword", auth, async(req, res) => {
         }
         // מייצרים טוקן לפי שמכיל את האיידי של המשתמש
         user.password= await bcrypt.hash(req.body.newpassword, 10);
-        user.password.save();
+        await user.save();
         res.json({ msg: "password changed  successfully"});
         
     } catch (err) {
