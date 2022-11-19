@@ -18,7 +18,6 @@ router.get("/myInfo", auth, async(req, res) => {
     try {
         let userInfo = await UserModel.findOne({ _id: req.tokenData._id }, { password: 0 });
         res.json(userInfo);
-        console.log("res.json(userInfo)");
         
 
     } catch (err) {
@@ -27,6 +26,7 @@ router.get("/myInfo", auth, async(req, res) => {
     }
 })
 router.patch("/myInfo/edit", auth, async(req, res) => {
+     //let userInfo = await UserModel.findOne({ _id: req.tokenData._id }, { password: 0 });
     // let validBody = validateUser(req.body);
     // if (validBody.error) {
     //     res.status(400).json(validBody.error.details)
@@ -165,7 +165,9 @@ router.patch("/changeActive/:userID", authAdmin, async(req, res) => {
 })
 
 module.exports = router;
+
 router.patch("/changepassword", auth, async(req, res) => {
+
     try {
         // קודם כל לבדוק אם המייל שנשלח קיים  במסד
         let user = await UserModel.findOne({ email: req.body.email })
