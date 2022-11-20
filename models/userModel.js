@@ -22,13 +22,13 @@ let userSchema = new mongoose.Schema({
     },
     active: {
         type: Boolean,
-        default: true,
+        default: false,
     },
     location: String,
     nickname: String,
     rank: {
         type: Number,
-        default: 10
+        default: 1
     }
 })
 

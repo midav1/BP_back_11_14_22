@@ -31,10 +31,12 @@ router.patch("/myInfo/edit", auth, async(req, res) => {
     // if (validBody.error) {
     //     res.status(400).json(validBody.error.details)
     // }
-    delete req.body.email;
-    delete req.body.rank;
-    delete req.body.data_created;
-    delete req.body.active;
+    if(req.body.email||req.body.email||req.body.data_created||req.body.active)
+    res.status(400).json({msg:"You send wrong data"})
+    // delete req.body.email;
+    // delete req.body.rank;
+    // delete req.body.data_created;
+    // delete req.body.active;
     try {
         let data = await UserModel.findOneAndUpdate({ _id: req.tokenData._id }, { $set: req.body });
         res.json(data);

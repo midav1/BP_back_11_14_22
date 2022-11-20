@@ -36,14 +36,14 @@ router.patch("/:idEdit", authAdmin, async(req, res) => {
   
   
   
-    let validBody = validateCategory(req.body);
-    console.log(req.body)
-    if (validBody.error) {
-        res.status(400).json(validBody.error.details)
-    }
+   // let validBody = validateCategory(req.body);
+    // console.log(req.body)
+    // if (validBody.error) {
+    //     res.status(400).json(validBody.error.details)
+    // }
     try {
         let idEdit = req.params.idEdit
-        let data = await CategoryModel.updateOne({ _id: idEdit }, req.body);
+        let data = await CategoryModel.updateOne({ _id: idEdit },{ $set: req.body });
         res.json(data);
     } catch (err) {
         console.log(err)

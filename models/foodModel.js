@@ -4,7 +4,7 @@ const Joi = require("joi");
 const foodSchema = new mongoose.Schema({
     name: String,
     info: String,
-    kosher: String,
+    hand: Number,
     img_url: String,
     location: String,
     phone: String,
@@ -28,7 +28,7 @@ exports.validateFood = (_reqBody) => {
     let joiSchema = Joi.object({
         name: Joi.string().min(2).max(99).required(),
         info: Joi.string().min(2).max(500).required(),
-        kosher: Joi.string().min(2).max(99).required(),
+        hand: Joi.number().min(2).max(99).required(),
         img_url: Joi.string().min(2).max(200).allow(null, ""),
         location: Joi.string().min(2).max(99).required(),
         phone: Joi.string().min(2).max(20).required(),
