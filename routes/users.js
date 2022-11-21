@@ -1,8 +1,10 @@
 const express = require("express");
 const bcrypt = require("bcrypt");
 const { auth, authAdmin } = require("../middlewares/auth");
-const { UserModel, validUser, validLogin, createToken } = require("../models/userModel")
+const { UserModel, validUser, validLogin, createToken } = require("../models/userModel");
+const mail_service = require("../services/mail_service");
 const router = express.Router();
+const uuid = require('uuid');
 
 router.get("/", async(req, res) => {
     res.json({ msg: "Users work" })
@@ -78,6 +80,10 @@ router.post("/", async(req, res) => {
     }
     try {
         let user = new UserModel(req.body);
+        const activationLink = uuid.v4(); // v34fa-asfasf-142saf-sa-asf
+        user.activationLink=activationLink;
+        console.log(activationLink)
+      await mail_service.sendActivationMail(req.body.email, `${process.env.API_URL}/activate/${activationLink}`);
         // נרצה להצפין את הסיסמא בצורה חד כיוונית
         // 10 - רמת הצפנה שהיא מעולה לעסק בינוני , קטן
         user.password = await bcrypt.hash(user.password, 10);

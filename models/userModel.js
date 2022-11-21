@@ -29,7 +29,8 @@ let userSchema = new mongoose.Schema({
     rank: {
         type: Number,
         default: 1
-    }
+    },
+    activationLink: {type: String}
 })
 
 exports.UserModel = mongoose.model("users", userSchema);
@@ -49,7 +50,7 @@ exports.validUser = (_reqBody) => {
         info: Joi.string().min(2).max(99).required(),
         img_url: Joi.string().min(2).max(9999).allow(null, ""),
         location: Joi.string().min(2).max(99).required(),
-        nickname: Joi.string().min(2).max(99).required(),
+        nickname: Joi.string().min(2).max(99).required()
     })
 
     return joiSchema.validate(_reqBody);

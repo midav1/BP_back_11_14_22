@@ -11,6 +11,7 @@ require("dotenv").config()
 exports.config = {
   userDb:process.env.USER_DB,
   passDb:process.env.PASS_DB,
-  tokenSecret:process.env.TOKEN_SECRET
+  tokenSecret:process.env.TOKEN_SECRET,
+  SMTP_HOST:process.env.SMTP_HOST
 }
 
