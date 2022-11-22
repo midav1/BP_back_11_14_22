@@ -28,7 +28,7 @@ router.post("/", async(req,res) => {
       console.log(err)
       return res.status(400).json({msg:"There problem"});
     }
-    res.json({msg:"File uploaded"})
+    res.status(201).json({msg:"File uploaded"})
   })
 })
 

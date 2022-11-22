@@ -4,7 +4,7 @@ const Joi = require("joi");
 const foodSchema = new mongoose.Schema({
     name: String,
     info: String,
-    hand: Number,
+    hand:String,
     img_url: String,
     location: String,
     phone: String,
@@ -12,9 +12,9 @@ const foodSchema = new mongoose.Schema({
         type: Date,
         default: Date.now()
     },
-    user_id: String,
-    categories_url: String,
-    price: Number,
+   user_id: String,
+   category_url: String,
+    price: String,
     user_nickname: String,
     active: {
         type: Boolean,
@@ -28,12 +28,12 @@ exports.validateFood = (_reqBody) => {
     let joiSchema = Joi.object({
         name: Joi.string().min(2).max(99).required(),
         info: Joi.string().min(2).max(500).required(),
-        hand: Joi.number().min(2).max(99).required(),
+        hand: Joi.string().min(1).max(99).required(),
         img_url: Joi.string().min(2).max(200).allow(null, ""),
         location: Joi.string().min(2).max(99).required(),
-        phone: Joi.string().min(2).max(20).required(),
-        categories_url: Joi.string().min(2).max(99).required(),
-        price: Joi.number().min(2).max(99).required(),
+         phone: Joi.string().min(2).max(20).required().allow(null, ""),
+         category_url: Joi.string().min(2).max(99).required(),
+         price: Joi.string().min(1).max(99).required(),
         user_nickname: Joi.string().min(2).max(99).allow(null, ""),
     })
     return joiSchema.validate(_reqBody);

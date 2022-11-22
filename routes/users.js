@@ -33,7 +33,7 @@ router.patch("/myInfo/edit", auth, async(req, res) => {
     // if (validBody.error) {
     //     res.status(400).json(validBody.error.details)
     // }
-    if(req.body.email||req.body.email||req.body.data_created||req.body.active)
+    if(req.body.email||req.body.rank||req.body.data_created||req.body.active)
     res.status(400).json({msg:"You send wrong data"})
     // delete req.body.email;
     // delete req.body.rank;
