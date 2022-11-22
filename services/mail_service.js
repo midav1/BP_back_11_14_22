@@ -27,7 +27,8 @@ class MailService {
                 `
                     <div>
                         <h1>To active account go to link</h1>
-                        <a href="${link}">${link}</a>
+                        <a href="${link}">
+                        ${link}</a>
                     </div>
                 `
         })

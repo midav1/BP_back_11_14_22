@@ -55,8 +55,9 @@ router.get("/count", async(req,res) => {
 
 router.post("/", auth, async(req,res) => {
   let validBody = validateFood(req.body);
+  console.log(req.body)
   if(validBody.error){
-    res.status(400).json(validBody.error.details)
+  res.status(400).json(validBody.error.details)
   }
   try{
     let food = new FoodModel(req.body);

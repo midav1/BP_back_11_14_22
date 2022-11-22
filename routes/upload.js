@@ -16,7 +16,7 @@ router.post("/", async(req,res) => {
     return res.status(400).json({msg:"File too big (max 2mb)"});
   }
   // סיומות שמותר למשתמש לעלות
-  let exts_ar = [".png",".jpg","jpeg",".gif"];
+  let exts_ar = [".png",".jpg",".jpeg",".gif"];
   // יכיל את הסיומת של הקובץ ששלחתי לשרת
   let extFileName = path.extname(myFile.name);
   if(!exts_ar.includes(extFileName)){
@@ -28,7 +28,7 @@ router.post("/", async(req,res) => {
       console.log(err)
       return res.status(400).json({msg:"There problem"});
     }
-    res.json({msg:"File uploaded"})
+    res.status(201).json({msg:"File uploaded"})
   })
 })
 
