@@ -7,15 +7,15 @@ const fileUpload = require("express-fileupload");
 
 const {routesInit} = require("./routes/config_routes")
 require("./db/mongoconnect");
-
 const app = express();
 
 app.use(cors());
 
 // מפעיל את האפשרות באקספרס לעבוד עם קבצים
 app.use(fileUpload({limits:{fileSize: 1024 * 1024 * 5 }}))
-
-app.use(express.json());
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ limit: '50mb', extended: true }));
+//app.use(express.json());
 // הגדרת תקיית הפאבליק כתקייה ראשית
 app.use(express.static(path.join(__dirname,"public")))
 

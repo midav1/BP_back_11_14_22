@@ -1,5 +1,4 @@
 const express = require("express");
-const { auth } = require("../middlewares/auth");
 const { UserModel } = require("../models/userModel");
 const router = express.Router();
 router.get("/:link", async(req, res) => {
