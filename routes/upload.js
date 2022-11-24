@@ -1,12 +1,14 @@
+const { axios } = require("axios");
 const express= require("express");
 const path = require("path");
+const { auth } = require("../middlewares/auth");
 const router = express.Router();
 
 router.get("/" , (req,res)=> {
   res.json({msg:"Upload work!"})
 })
 
-router.post("/", async(req,res) => {
+router.post("/",auth, async(req,res) => {
   let myFile = req.files["myFile22"];
 
   if(!myFile){
