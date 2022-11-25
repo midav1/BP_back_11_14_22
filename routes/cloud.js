@@ -1,17 +1,62 @@
-const express= require("express");
+const express = require("express");
+const { auth } = require("../middlewares/auth");
+const { FoodModel } = require("../models/foodModel");
+const { UserModel } = require("../models/userModel");
 const router = express.Router();
 const { cloudinary } = require("../services/cloud_service");
-router.post('/api/upload', async (req, res) => {
-    try {
-        const fileStr = req.body.data;
-        const uploadResponse = await cloudinary.uploader.upload(fileStr, {
-            upload_preset: "users_preset",
-        });
-        console.log(uploadResponse);
-        res.json({ msg: 'Succsess' });
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ err: 'Something went wrong' });
+router.post("/api/upload", auth, async (req, res) => {
+  console.log(req.body.preset, req.tokenData._id);
+  try {
+    const fileStr = req.body.data;
+    const uploadResponse = await cloudinary.uploader.upload(fileStr, {
+      upload_preset: req.body.preset,
+      public_id: req.tokenData._id,
+    });
+    console.log(uploadResponse);
+    if ((req.body.preset = "users_preset")) {
+      let data = await UserModel.findOneAndUpdate(
+        { _id: req.tokenData._id },
+        { img_url: uploadResponse.url }
+      );
     }
+    if ((req.body.preset = "items_preset")) {
+      let data = await FoodModel.findOneAndUpdate(
+        { _id: req.tokenData._id },
+        { img_url: uploadResponse.url }
+      );
+    }
+
+    res.json({ msg: "Succsess" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ err: "Something went wrong" });
+  }
 });
 module.exports = router;
+router.post("/api/destroy", auth, async (req, res) => {
+  try {
+    const fileStr = req.body.data;
+    const destroyResponse = await cloudinary.uploader
+      .destroy(fileStr, {
+        upload_preset: req.body.preset,
+        public_id: req.tokenData._id,
+      })
+      .then((result) => console.log(result));
+    console.log(uploadResponse);
+    if ((req.body.preset = "users_preset")) {
+      let data = await UserModel.findOneAndUpdate(
+        { _id: req.tokenData._id },
+        { img_url: "" }
+      );
+    }
+    if ((req.body.preset = "items_preset")) {
+      let data = await FoodModel.findOneAndUpdate(
+        { _id: req.tokenData._id },
+        { img_url: "" }
+      );
+    }
+  } catch {}
+});
+///cloudinary.v2.uploader
+//.destroy('sample', resource_type: 'video')
+//.then(result=>console.log(result));
