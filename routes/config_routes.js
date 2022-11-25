@@ -12,4 +12,5 @@ exports.routesInit = (app) => {
   app.use("/foods",foodsR);
   app.use("/upload",uploadR);
   app.use("/cloud",cloudR);
+  app.use("/activate",activateR);
 }
