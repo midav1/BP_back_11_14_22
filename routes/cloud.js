@@ -34,11 +34,11 @@ router.post("/api/upload", auth, async (req, res) => {
 });
 module.exports = router;
 router.post("/api/destroy", auth, async (req, res) => {
-    console.log(req.body.folder+"/"+req.tokenData._id)
+  console.log(req.body.folder + "/" + req.tokenData._id);
   try {
-  //  const fileStr = req.body.data;
+    //  const fileStr = req.body.data;
     const destroyResponse = await cloudinary.uploader
-      .destroy(req.body.folder+"/"+req.tokenData._id)
+      .destroy(req.body.folder + "/" + req.tokenData._id)
       .then((result) => console.log(result));
     console.log(destroyResponse);
     if ((req.body.folder = "users")) {
