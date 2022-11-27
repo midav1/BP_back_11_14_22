@@ -34,22 +34,20 @@ router.post("/api/upload", auth, async (req, res) => {
 });
 module.exports = router;
 router.post("/api/destroy", auth, async (req, res) => {
+  console.log(req.body.folder + "/" + req.tokenData._id);
   try {
-    const fileStr = req.body.data;
+    //  const fileStr = req.body.data;
     const destroyResponse = await cloudinary.uploader
-      .destroy(fileStr, {
-        upload_preset: req.body.preset,
-        public_id: req.tokenData._id,
-      })
+      .destroy(req.body.folder + "/" + req.tokenData._id)
       .then((result) => console.log(result));
-    console.log(uploadResponse);
-    if ((req.body.preset = "users_preset")) {
+    console.log(destroyResponse);
+    if ((req.body.folder = "users")) {
       let data = await UserModel.findOneAndUpdate(
         { _id: req.tokenData._id },
         { img_url: "" }
       );
     }
-    if ((req.body.preset = "items_preset")) {
+    if ((req.body.folder = "items")) {
       let data = await FoodModel.findOneAndUpdate(
         { _id: req.tokenData._id },
         { img_url: "" }

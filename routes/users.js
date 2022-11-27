@@ -120,8 +120,8 @@ router.post("/login", async(req, res) => {
             return res.status(401).json({ msg: "Password or email is worng ,code:2" });
         }
         // מייצרים טוקן לפי שמכיל את האיידי של המשתמש
-        let token = createToken(user._id, user.role);
-        res.json({ token, userName: user.name,userrole: user.role});
+        let token = createToken(user._id, user.role,user.active);
+        res.json({ token, userName: user.name,userRole: user.role,userActive:user.active});
         
         
     } catch (err) {
