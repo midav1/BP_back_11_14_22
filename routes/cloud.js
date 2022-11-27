@@ -1,6 +1,6 @@
 const express = require("express");
 const { auth } = require("../middlewares/auth");
-const { FoodModel } = require("../models/foodModel");
+const { ItemModel } = require("../models/itemModel");
 const { UserModel } = require("../models/userModel");
 const router = express.Router();
 const { cloudinary } = require("../services/cloud_service");
@@ -20,7 +20,7 @@ router.post("/api/upload", auth, async (req, res) => {
       );
     }
     if ((req.body.preset = "items_preset")) {
-      let data = await FoodModel.findOneAndUpdate(
+      let data = await ItemModel.findOneAndUpdate(
         { _id: req.tokenData._id },
         { img_url: uploadResponse.url }
       );
@@ -48,7 +48,7 @@ router.post("/api/destroy", auth, async (req, res) => {
       );
     }
     if ((req.body.folder = "items")) {
-      let data = await FoodModel.findOneAndUpdate(
+      let data = await ItemModel.findOneAndUpdate(
         { _id: req.tokenData._id },
         { img_url: "" }
       );
