@@ -1,6 +1,6 @@
 const express = require("express");
 const { auth } = require("../middlewares/auth");
-const { validateFood, FoodModel } = require("../models/foodModel");
+const { validateItem, ItemModel } = require("../models/itemModel");
 const router = express.Router();
 
 router.get("/", async (req, res) => {
@@ -12,7 +12,7 @@ router.get("/", async (req, res) => {
   let searchReg = new RegExp(queryS, "i")
 
   try {
-    let data = await FoodModel.find({ $or: [{ name: searchReg }, { info: searchReg }] })
+    let data = await ItemModel.find({ $or: [{ name: searchReg }, { info: searchReg }] })
       .limit(perPage)
       .skip((page - 1) * perPage)
       // .sort({_id:-1}) like -> order by _id DESC
@@ -23,13 +23,13 @@ router.get("/", async (req, res) => {
     res.status(500).json({ msg: "there erorr try again later", err });
   }
 });
-router.get("/myitems", auth, async (req, res) => {
+router.get("/myitems",auth, async (req, res) => {
   let perPage = req.query.perPage || 5;
   let page = req.query.page || 1;
   let sort = req.query.sort || "_id";
   let reverse = req.query.reverse == "yes" ? 1 : -1;
   try {
-    let data = await FoodModel.find({ user_id: req.tokenData._id })
+    let data = await ItemModel.find({ user_id: req.tokenData._id })
       .limit(perPage)
       .skip((page - 1) * perPage)
       // .sort({_id:-1}) like -> order by _id DESC
@@ -40,11 +40,20 @@ router.get("/myitems", auth, async (req, res) => {
     res.status(500).json({ msg: "err", err });
   }
 });
+router.get("/byId/:id",auth,async (req, res) => {
+  try {
+    let data = await ItemModel.findOne({ _id: req.params.id });
+    res.json(data);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ msg: "there error try again later", err });
+  }
+});
 
 router.get("/count", async (req, res) => {
   try {
     // .countDocument -> מחזיר את המספר רשומות שקיימים במסד
-    let count = await FoodModel.countDocuments({});
+    let count = await ItemModel.countDocuments({});
     res.json({ count });
   } catch (err) {
     console.log(err);
@@ -53,16 +62,16 @@ router.get("/count", async (req, res) => {
 });
 
 router.post("/", auth, async (req, res) => {
-  let validBody = validateFood(req.body);
+  let validBody = validateItem(req.body);
   console.log(req.body);
   if (validBody.error) {
     res.status(400).json(validBody.error.details);
   }
   try {
-    let food = new FoodModel(req.body);
-    food.user_id = req.tokenData._id;
-    await food.save();
-    res.json(food);
+    let item = new ItemModel(req.body);
+    item.user_id = req.tokenData._id;
+    await item.save();
+    res.json(item);
   } catch (err) {
     console.log(err);
     res.status(500).json({ msg: "err", err });
@@ -70,7 +79,7 @@ router.post("/", auth, async (req, res) => {
 });
 
 router.put("/:idEdit", auth, async (req, res) => {
-  let validBody = validateFood(req.body);
+  let validBody = validateItem(req.body);
   if (validBody.error) {
     res.status(400).json(validBody.error.details);
   }
@@ -78,9 +87,9 @@ router.put("/:idEdit", auth, async (req, res) => {
     let idEdit = req.params.idEdit;
     let data;
     if (req.tokenData.role == "admin") {
-      data = await FoodModel.updateOne({ _id: idEdit }, req.body);
+      data = await ItemModel.updateOne({ _id: idEdit }, req.body);
     } else {
-      data = await FoodModel.updateOne(
+      data = await ItemModel.updateOne(
         { _id: idEdit, user_id: req.tokenData._id },
         req.body
       );
@@ -97,9 +106,9 @@ router.delete("/:idDel", auth, async (req, res) => {
     let idDel = req.params.idDel;
     let data;
     if (req.tokenData.role == "admin") {
-      data = await FoodModel.deleteOne({ _id: idDel });
+      data = await ItemModel.deleteOne({ _id: idDel });
     } else {
-      data = await FoodModel.deleteOne({
+      data = await ItemModel.deleteOne({
         _id: idDel,
         user_id: req.tokenData._id,
       });

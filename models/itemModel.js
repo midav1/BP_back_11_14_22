@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const Joi = require("joi");
 
-const foodSchema = new mongoose.Schema({
+const itemSchema = new mongoose.Schema({
     name: String,
     info: String,
     hand:String,
@@ -12,8 +12,8 @@ const foodSchema = new mongoose.Schema({
         type: Date,
         default: Date.now()
     },
-   user_id: String,
-   category_url: String,
+    user_id: String,
+    category_url: String,
     price: String,
     user_nickname: String,
     active: {
@@ -22,9 +22,9 @@ const foodSchema = new mongoose.Schema({
     }
 })
 
-exports.FoodModel = mongoose.model("foods", foodSchema);
+exports.ItemModel = mongoose.model("items", itemSchema);
 
-exports.validateFood = (_reqBody) => {
+exports.validateItem = (_reqBody) => {
     let joiSchema = Joi.object({
         name: Joi.string().min(2).max(99).required(),
         info: Joi.string().min(2).max(500).required(),

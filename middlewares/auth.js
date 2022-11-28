@@ -11,7 +11,7 @@ exports.auth = (req,res,next) => {
     // add to req , so the next function will recognize
     // the tokenData/decodeToken
     req.tokenData = decodeToken;
-
+    console.log(token)
     next();
   }
   catch(err){
