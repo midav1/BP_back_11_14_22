@@ -23,7 +23,7 @@ router.get("/", async (req, res) => {
     res.status(500).json({ msg: "there erorr try again later", err });
   }
 });
-router.get("/myitems", auth, async (req, res) => {
+router.get("/myitems",auth, async (req, res) => {
   let perPage = req.query.perPage || 5;
   let page = req.query.page || 1;
   let sort = req.query.sort || "_id";
@@ -38,6 +38,15 @@ router.get("/myitems", auth, async (req, res) => {
   } catch (err) {
     console.log(err);
     res.status(500).json({ msg: "err", err });
+  }
+});
+router.get("/byId/:id",auth,async (req, res) => {
+  try {
+    let data = await ItemModel.findOne({ _id: req.params.id });
+    res.json(data);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ msg: "there error try again later", err });
   }
 });
 

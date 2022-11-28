@@ -121,7 +121,7 @@ router.post("/login", async(req, res) => {
         }
         // מייצרים טוקן לפי שמכיל את האיידי של המשתמש
         let token = createToken(user._id, user.role,user.active);
-        res.json({ token, userName: user.name,userRole: user.role,userActive:user.active});
+        res.json({ token, username: user.name,userrole: user.role,useractive:user.active});
         
         
     } catch (err) {

@@ -12,8 +12,8 @@ const itemSchema = new mongoose.Schema({
         type: Date,
         default: Date.now()
     },
-   user_id: String,
-   category_url: String,
+    user_id: String,
+    category_url: String,
     price: String,
     user_nickname: String,
     active: {
