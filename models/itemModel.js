@@ -18,7 +18,11 @@ const itemSchema = new mongoose.Schema({
     user_nickname: String,
     active: {
         type: Boolean,
-        default: true
+        default: false
+    },
+    date_expired: {
+        type: Date,
+        default: Date.now()+86400000
     }
 })
 

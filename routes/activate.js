@@ -11,10 +11,11 @@ router.get("/:link", async (req, res) => {
       return res.status(401).json("Wrong link");
     }
     user.active = true;
+    user.activationLink='';
     await user.save();
     return (
       res.redirect(process.env.CLIENT_URL) &&
-      res.status(200).json("welcome to usell")
+      res.status(200).json("WELCOME TO USELL")
     );
   } catch (err) {
     console.log(err);
