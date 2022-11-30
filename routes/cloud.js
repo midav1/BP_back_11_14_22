@@ -6,11 +6,12 @@ const router = express.Router();
 const { cloudinary } = require("../services/cloud_service");
 router.post("/api/upload", auth, async (req, res) => {
   console.log(req.body.preset, req.tokenData._id);
+  console.log(req.body._id)
   try {
     const fileStr = req.body.data;
     const uploadResponse = await cloudinary.uploader.upload(fileStr, {
       upload_preset: req.body.preset,
-      public_id: req.tokenData._id,
+      public_id: req.tokenData._id+(req.body._id?("_id"+req.body._id) :"")
     });
     console.log(uploadResponse);
     if ((req.body.preset = "users_preset")) {
@@ -21,7 +22,7 @@ router.post("/api/upload", auth, async (req, res) => {
     }
     if ((req.body.preset = "items_preset")) {
       let data = await ItemModel.findOneAndUpdate(
-        { _id: req.tokenData._id },
+        { _id:req.body._id},
         { img_url: uploadResponse.url }
       );
     }
@@ -38,7 +39,7 @@ router.post("/api/destroy", auth, async (req, res) => {
   try {
     //  const fileStr = req.body.data;
     const destroyResponse = await cloudinary.uploader
-      .destroy(req.body.folder + "/" + req.tokenData._id)
+      .destroy(req.body.folder + "/" + req.tokenData._id+(req.body._id?("_id"+req.body._id) :""))
       .then((result) => console.log(result));
     console.log(destroyResponse);
     if ((req.body.folder = "users")) {
@@ -49,7 +50,7 @@ router.post("/api/destroy", auth, async (req, res) => {
     }
     if ((req.body.folder = "items")) {
       let data = await ItemModel.findOneAndUpdate(
-        { _id: req.tokenData._id },
+        { _id: req.body._id },
         { img_url: "" }
       );
     }

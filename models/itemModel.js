@@ -18,7 +18,11 @@ const itemSchema = new mongoose.Schema({
     user_nickname: String,
     active: {
         type: Boolean,
-        default: true
+        default: false
+    },
+    date_expired: {
+        type: Date,
+        default: Date.now()+86400000
     }
 })
 
@@ -34,7 +38,7 @@ exports.validateItem = (_reqBody) => {
          phone: Joi.string().min(2).max(20).required().allow(null, ""),
          category_url: Joi.string().min(2).max(99).required(),
          price: Joi.string().min(1).max(99).required(),
-        user_nickname: Joi.string().min(2).max(99).allow(null, ""),
+         user_nickname: Joi.string().min(2).max(99).allow(null, ""),
     })
     return joiSchema.validate(_reqBody);
 }
