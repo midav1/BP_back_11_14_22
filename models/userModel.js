@@ -17,7 +17,8 @@ let userSchema = new mongoose.Schema({
     },
     // role of the user if regular user or admin
     role: {
-        type: String,
+        type:String,
+        enum: ['user','admin'],
         default: "user"
     },
     active: {

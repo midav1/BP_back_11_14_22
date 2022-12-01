@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 const Joi = require("joi");
-
 const lotSchema = new mongoose.Schema({
     name: String,
     info: String,
@@ -20,21 +19,14 @@ const lotSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
-    item_lot: {
-        type: Boolean,
-        default: false
-    },
-    date_expired: {
-        type: Date,
-        default:Date.now()+864000
-    },
-    winner_user_id:{
-        type: String,
-        default:null
-    }
+    item:{
+    item_lot: {type: Boolean, default: false },
+    date_expired: { type: Date, default:null },
+    winner_user_id:{   type: String,default:null },
+    winner_price:{ type: String,default:null }}
 })
 
-exports.lotModel = mongoose.model("lots", lotSchema);
+
 
 exports.validateLot = (_reqBody) => {
     let joiSchema = Joi.object({
@@ -50,3 +42,4 @@ exports.validateLot = (_reqBody) => {
     })
     return joiSchema.validate(_reqBody);
 }
+exports.LotModel = mongoose.model("lots", lotSchema);
