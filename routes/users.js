@@ -1,7 +1,7 @@
 const express = require("express");
 const bcrypt = require("bcrypt");
 const { auth, authAdmin } = require("../middlewares/auth");
-const { UserModel, validUser, validLogin, createToken } = require("../models/userModel");
+const { UserModel, validUser, validLogin, createToken, validSignUp } = require("../models/userModel");
 const mail_service = require("../services/mail_service");
 const router = express.Router();
 const uuid = require('uuid');
@@ -27,19 +27,20 @@ router.get("/myInfo", auth, async(req, res) => {
         res.status(500).json({ msg: "err", err })
     }
 })
-router.patch("/myInfo/edit", auth, async(req, res) => {
+router.patch("/myinfo/edit", auth, async(req, res) => {
      //let userInfo = await UserModel.findOne({ _id: req.tokenData._id }, { password: 0 });
     // let validBody = validateUser(req.body);
     // if (validBody.error) {
     //     res.status(400).json(validBody.error.details)
     // }
-    if(req.body.email||req.body.rank||req.body.data_created||req.body.active)
-    res.status(400).json({msg:"You send wrong data"})
+    // if(req.body.email||req.body.rank||req.body.data_created||req.body.active)
+    // res.status(400).json({msg:"You send wrong data"})
     // delete req.body.email;
     // delete req.body.rank;
     // delete req.body.data_created;
     // delete req.body.active;
     try {
+        console.log(req.body)
         let data = await UserModel.findOneAndUpdate({ _id: req.tokenData._id }, { $set: req.body });
         res.json(data);
     } catch (err) {
@@ -121,7 +122,9 @@ router.post("/login", async(req, res) => {
         }
         // מייצרים טוקן לפי שמכיל את האיידי של המשתמש
         let token = createToken(user._id, user.role,user.active);
-        res.json({ token, username: user.name,userrole: user.role,useractive:user.active});
+        const userclone = { ...user } // note: original object is not altered
+        delete userclone._doc.password;
+        res.json({token,userclone} );
         
         
     } catch (err) {
@@ -139,7 +142,7 @@ router.patch("/changeRole/:userID", authAdmin, async(req, res) => {
     try {
         let userID = req.params.userID
             // לא מאפשר ליוזר אדמין להפוך למשהו אחר/ כי הוא הסופר אדמין
-        if (userID == "636e309fcdbdb3f806e2823a") {
+        if (userID == "636ba7baa4c19d9a0a2f0869") {
             return res.status(401).json({ msg: "You cant change superadmin to user" });
 
         }
@@ -160,7 +163,7 @@ router.patch("/changeActive/:userID", authAdmin, async(req, res) => {
     try {
         let userID = req.params.userID
             // לא מאפשר ליוזר אדמין להפוך למשהו אחר/ כי הוא הסופר אדמין
-        if (userID == "635f9790c65e88e8e93de6db") {
+        if (userID == "636ba7baa4c19d9a0a2f0869") {
             return res.status(401).json({ msg: "You cant change superadmin to user" });
 
         }

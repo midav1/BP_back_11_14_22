@@ -3,7 +3,7 @@ const Joi = require("joi");
 const lotSchema = new mongoose.Schema({
     name: String,
     info: String,
-    hand:String,
+    hand:Number,
     img_url: String,
     location: String,
     phone: String,
@@ -21,24 +21,32 @@ const lotSchema = new mongoose.Schema({
     },
     item:{
     item_lot: {type: Boolean, default: false },
-    date_expired: { type: Date, default:null },
-    winner_user_id:{   type: String,default:null },
+    date_expired: { type: Number, default:null },
+    winner_user_id:{ type: String,default:null },
     winner_price:{ type: String,default:null }}
 })
-
-
+lotSchema.virtual('categories',{
+    ref: 'categories',
+    localField: 'category_url',
+    foreignField: 'category_url',
+  });
+  lotSchema.set('toObject', { virtuals: true });
+  lotSchema.set('toJSON', { virtuals: true });
 
 exports.validateLot = (_reqBody) => {
     let joiSchema = Joi.object({
         name: Joi.string().min(2).max(99).required(),
         info: Joi.string().min(2).max(500).required(),
-        hand: Joi.string().min(1).max(99).required(),
+        hand: Joi.number().min(1).max(99).required(),
         img_url: Joi.string().min(2).max(200).allow(null, ""),
         location: Joi.string().min(2).max(99).required(),
          phone: Joi.string().min(2).max(20).required().allow(null, ""),
          category_url: Joi.string().min(2).max(99).required(),
          start_price: Joi.string().min(1).max(99).required(),
          user_nickname: Joi.string().min(2).max(99).allow(null, ""),
+         item:{item_lot: Joi.boolean(),
+         date_expired: Joi.number().min(2).max(99).allow(null, "") 
+                                }
     })
     return joiSchema.validate(_reqBody);
 }

@@ -56,6 +56,17 @@ exports.validUser = (_reqBody) => {
 
     return joiSchema.validate(_reqBody);
 }
+exports.validSignUp = (_reqBody) => {
+    let joiSchema = Joi.object({
+        name: Joi.string().min(2).max(99).required(),
+        email: Joi.string().min(2).max(99).email().required(),
+        password: Joi.string().min(3).max(99).required(),
+        phone: Joi.string().min(8).max(99).required(),
+        birth_date: Joi.string().min(2).max(99).required(),
+    })
+
+    return joiSchema.validate(_reqBody);
+}
 
 exports.validLogin = (_reqBody) => {
     let joiSchema = Joi.object({

@@ -30,16 +30,11 @@ router.get("/byId/:id", async (req, res) => {
   }
 });
 
-router.patch("/:idEdit", authAdmin, async (req, res) => {
-  // let validBody = validateCategory(req.body);
-  // console.log(req.body)
-  // if (validBody.error) {
-  //     res.status(400).json(validBody.error.details)
-  // }
+router.patch("/:category_urlEdit", authAdmin, async (req, res) => {
   try {
-    let idEdit = req.params.idEdit;
+    let category_urlEdit = req.params.category_urlEdit;
     let data = await CategoryModel.updateOne(
-      { _id: idEdit },
+      { category_url: category_urlEdit },
       { $set: req.body }
     );
     res.json(data);
@@ -64,10 +59,10 @@ router.post("/", authAdmin, async (req, res) => {
   }
 });
 
-router.delete("/:idDel", authAdmin, async (req, res) => {
+router.delete("/:category_urlDel", authAdmin, async (req, res) => {
   try {
-    let idDel = req.params.idDel;
-    let data = await CategoryModel.deleteOne({ _id: idDel });
+    let category_urlDel = req.params.category_urlDel;
+    let data = await CategoryModel.deleteOne({ category_url: category_urlDel });
     res.json(data);
   } catch (err) {
     console.log(err);

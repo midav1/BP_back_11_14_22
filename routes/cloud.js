@@ -6,7 +6,7 @@ const router = express.Router();
 const { cloudinary } = require("../services/cloud_service");
 router.post("/api/upload", auth, async (req, res) => {
   console.log(req.body.preset, req.tokenData._id);
-  console.log(req.body._id)
+  
   try {
     const fileStr = req.body.data;
     const uploadResponse = await cloudinary.uploader.upload(fileStr, {
@@ -27,7 +27,7 @@ router.post("/api/upload", auth, async (req, res) => {
       );
     }
 
-    res.json({ msg: "Succsess" });
+    res.json({ msg: "Succsess" }, { img_url: uploadResponse.url });
   } catch (err) {
     console.error(err);
     res.status(500).json({ err: "Something went wrong" });

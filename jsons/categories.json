@@ -3,7 +3,7 @@
     "$oid": "635f9e1cc9bbbcaa00d8652e"
   },
   "name": "Cakes",
-  "url_name": "cakes",
+  "category_url": "cakes",
   "info": "All the tasty cakes in the site ",
   "img_url": "https://images.pexels.com/photos/2337823/pexels-photo-2337823.jpeg?auto=compress&cs=tinysrgb&w=600",
   "__v": 0
@@ -12,7 +12,7 @@
     "$oid": "635f9ecac9bbbcaa00d86534"
   },
   "name": "Icecream",
-  "url_name": "icecream",
+  "category_url": "icecream",
   "info": "All the tasty icreams in the site ",
   "img_url": "https://images.pexels.com/photos/1362534/pexels-photo-1362534.jpeg?auto=compress&cs=tinysrgb&w=600",
   "__v": 0
@@ -21,7 +21,7 @@
     "$oid": "635fb4cf6ec4bd536fda0bb2"
   },
   "name": "Cookies",
-  "url_name": "cookies",
+  "category_url": "cookies",
   "info": "All the tasty icreams in the site ",
   "img_url": "https://images.pexels.com/photos/7966398/pexels-photo-7966398.jpeg?auto=compress&cs=tinysrgb&w=600",
   "__v": 0
@@ -30,7 +30,7 @@
     "$oid": "636237bcff038d28ee0e277d"
   },
   "name": "Salty",
-  "url_name": "salty",
+  "category_url": "salty",
   "info": "Item that include salt or it Salty",
   "img_url": "https://images.pexels.com/photos/33129/popcorn-movie-party-entertainment.jpg?auto=compress&cs=tinysrgb&w=600",
   "__v": 0
@@ -39,7 +39,7 @@
     "$oid": "636237f3ff038d28ee0e2780"
   },
   "name": "Fruits",
-  "url_name": "fruits",
+  "category_url": "fruits",
   "info": "Item of fruits",
   "img_url": "https://images.pexels.com/photos/1132047/pexels-photo-1132047.jpeg?auto=compress&cs=tinysrgb&w=600",
   "__v": 0
@@ -48,7 +48,7 @@
     "$oid": "63623852ff038d28ee0e2783"
   },
   "name": "Vegetables",
-  "url_name": "vegetables",
+  "category_url": "vegetables",
   "info": "Items that include vegetables",
   "img_url": "https://images.pexels.com/photos/1640774/pexels-photo-1640774.jpeg?auto=compress&cs=tinysrgb&w=600",
   "__v": 0
