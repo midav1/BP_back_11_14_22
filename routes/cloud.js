@@ -1,6 +1,6 @@
 const express = require("express");
 const { auth } = require("../middlewares/auth");
-const { ItemModel } = require("../models/itemModel");
+const { LotModel } = require("../models/lotModel");
 const { UserModel } = require("../models/userModel");
 const router = express.Router();
 const { cloudinary } = require("../services/cloud_service");
@@ -14,20 +14,20 @@ router.post("/api/upload", auth, async (req, res) => {
       public_id: req.tokenData._id+(req.body._id?("_id"+req.body._id) :"")
     });
     console.log(uploadResponse);
-    if ((req.body.preset = "users_preset")) {
-      let data = await UserModel.findOneAndUpdate(
-        { _id: req.tokenData._id },
-        { img_url: uploadResponse.url }
-      );
-    }
-    if ((req.body.preset = "items_preset")) {
-      let data = await ItemModel.findOneAndUpdate(
-        { _id:req.body._id},
-        { img_url: uploadResponse.url }
-      );
-    }
+     if ((req.body.preset == "users_preset")) {
+     let data = await UserModel.findOneAndUpdate(
+         { _id: req.tokenData._id },
+         { img_url: uploadResponse.url }
+       );
+     }
+     if ((req.body.preset == "items_preset")) {
+       let data = await LotModel.findOneAndUpdate(
+         { _id:req.body._id},
+         { img_url: uploadResponse.url }
+       );
+     }
 
-    res.json({ msg: "Succsess" }, { img_url: uploadResponse.url });
+    res.json({ msg: "Succsess"});
   } catch (err) {
     console.error(err);
     res.status(500).json({ err: "Something went wrong" });

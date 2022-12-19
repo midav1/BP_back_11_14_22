@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const Joi = require("joi");
+const ONE_DAY =  86400
 const lotSchema = new mongoose.Schema({
     name: String,
     info: String,
@@ -20,11 +21,14 @@ const lotSchema = new mongoose.Schema({
         default: false
     },
     item:{
-    item_lot: {type: Boolean, default: false },
-    date_expired: { type: Number, default:null },
+    item_lot: {type: Boolean, default: false},
+    days: {type: Number, default:null },
     winner_user_id:{ type: String,default:null },
     winner_price:{ type: String,default:null }}
-})
+}
+)
+lotSchema.virtual('date_expired').
+  get(function() { return `${this.item.days*ONE_DAY+this.date_created.getTime()}`; });
 lotSchema.virtual('categories',{
     ref: 'categories',
     localField: 'category_url',
@@ -45,9 +49,9 @@ exports.validateLot = (_reqBody) => {
          start_price: Joi.string().min(1).max(99).required(),
          user_nickname: Joi.string().min(2).max(99).allow(null, ""),
          item:{item_lot: Joi.boolean(),
-         date_expired: Joi.number().min(2).max(99).allow(null, "") 
+         days: Joi.number().min(1).max(7).allow(null, "")} 
                                 }
-    })
+    )
     return joiSchema.validate(_reqBody);
 }
 exports.LotModel = mongoose.model("lots", lotSchema);
