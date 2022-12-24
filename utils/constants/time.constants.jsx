@@ -1,1 +1,1 @@
-export const ONE_DAY =  86400000//milliseconds
+export const ONE_DAY=86400000//milliseconds
