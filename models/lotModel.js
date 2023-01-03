@@ -20,10 +20,10 @@ const lotSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
-    item_lot: {type: Boolean, default: false},
-    days: {type: Number, default:null },
-    winner_user_id:{ type: String,default:null },
-    winner_price:{ type: Number,default:null }
+    item_lot: {type:Boolean, default: false},
+    days: {type:Number, default:null },
+    winner_user_id:{type:String,default:null },
+    winner_price:{type:Number,default:null }
 }
 )
 lotSchema.virtual('date_expired').
@@ -58,8 +58,7 @@ exports.LotModel = mongoose.model("lots", lotSchema);
 exports.validateLotBid = (_reqBody) => {
     let joiSchema = Joi.object({
          winner_user_id:Joi.string().min(1).max(99).required(),
-         winner_price: Joi.number().min(1).required(),
-         user_id:Joi.string().min(1).required()
+         winner_price:Joi.number().min(1).required()
     })
 
     return joiSchema.validate(_reqBody);

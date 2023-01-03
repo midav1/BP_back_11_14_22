@@ -28,17 +28,6 @@ router.get("/myInfo", auth, async(req, res) => {
     }
 })
 router.patch("/myinfo/edit", auth, async(req, res) => {
-     //let userInfo = await UserModel.findOne({ _id: req.tokenData._id }, { password: 0 });
-    // let validBody = validateUser(req.body);
-    // if (validBody.error) {
-    //     res.status(400).json(validBody.error.details)
-    // }
-    // if(req.body.email||req.body.rank||req.body.data_created||req.body.active)
-    // res.status(400).json({msg:"You send wrong data"})
-    // delete req.body.email;
-    // delete req.body.rank;
-    // delete req.body.data_created;
-    // delete req.body.active;
     try {
         console.log(req.body)
         let data = await UserModel.findOneAndUpdate({ _id: req.tokenData._id }, { $set: req.body });
@@ -81,6 +70,7 @@ router.post("/", async(req, res) => {
     }
     try {
         let user = new UserModel(req.body);
+        console.log(user)
         const activationLink = uuid.v4(); // v34fa-asfasf-142saf-sa-asf
         user.activationLink=activationLink;
         console.log(activationLink)
@@ -91,7 +81,7 @@ router.post("/", async(req, res) => {
         // מתרגם ליוניקס
         user.birth_date = Date.parse(user.birth_date);
         await user.save();
-        user.password = "***";
+        user.password = "*******";
         res.status(201).json(user);
     } catch (err) {
         if (err.code == 11000) {
@@ -142,7 +132,7 @@ router.patch("/changeRole/:userID", authAdmin, async(req, res) => {
     try {
         let userID = req.params.userID
             // לא מאפשר ליוזר אדמין להפוך למשהו אחר/ כי הוא הסופר אדמין
-        if (userID == "636ba7baa4c19d9a0a2f0869") {
+        if (userID == "63af3051ebeb92039e3b3938") {
             return res.status(401).json({ msg: "You cant change superadmin to user" });
 
         }
@@ -194,6 +184,26 @@ router.patch("/changepassword", auth, async(req, res) => {
         user.password= await bcrypt.hash(req.body.newpassword, 10);
         await user.save();
         res.json({ msg: "password changed  successfully"});
+        
+    } catch (err) {
+        console.log(err)
+        res.status(500).json({ msg: "err", err })
+    }
+})
+router.post("/forgetpassword", async(req, res) => {
+   
+        // קודם כל לבדוק אם המייל שנשלח קיים  במסד
+        let user = await UserModel.findOne({ email: req.body.email })
+        if (!user) {
+            return res.status(401).json({ msg: "Email or user not exist " })
+        }
+       
+        try {
+            const changepasswordLink = uuid.v4();
+            user.changepasswordLink=changepasswordLink;
+            await user.save();
+            await mail_service.sendActivationMail(req.body.email, `${process.env.API_URL}/temppassword/${changepasswordLink}`);
+        res.json({ msg: "Check your  email"});
         
     } catch (err) {
         console.log(err)

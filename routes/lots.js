@@ -3,19 +3,30 @@ const { auth } = require("../middlewares/auth");
 const router = express.Router();
 const { validateLot, LotModel, validateLotBid } = require("../models/lotModel");
 router.get("/", async (req, res) => {
-  let perPage = req.query.perPage || 10;
+  let perPage = req.query.perPage || 9;
   let page = req.query.page || 1;
   let sort = req.query.sort || "_id";
+  let category = req.query.category ;
   let reverse = req.query.reverse == "yes" ? 1 : -1;
   let queryS = req.query.s;
   let searchReg = new RegExp(queryS, "i")
+  let filter_category = {category_url :category};
+  if(category=="ALL") {
+    filter_category={}
+}
 
   try {
-    let data = await LotModel.find({ $or: [{ name: searchReg }, { info: searchReg }] }).populate('categories')
+    let data = await LotModel.find(
+      {
+        $and: [
+            { $or: [ filter_category ] },
+            { $or: [ {name: searchReg  }, { info: searchReg } ] }
+        ]
+    }  ).populate('categories')
       .limit(perPage)
       .skip((page - 1) * perPage)
       // .sort({_id:-1}) like -> order by _id DESC
-      .sort({ [sort]: reverse });
+      .sort({ [sort]: reverse })
     res.json(data);
   } catch (err) {
     console.log(err);
@@ -23,26 +34,27 @@ router.get("/", async (req, res) => {
   }
 });
 router.get("/myitems",auth, async (req, res) => {
-  let perPage = req.query.perPage || 5;
+  let perPage = req.query.perPage || 9;
   let page = req.query.page || 1;
   let sort = req.query.sort || "_id";
   let reverse = req.query.reverse == "yes" ? 1 : -1;
   try {
-    let data = await LotModel.find({ user_id: req.tokenData._id }).populate('categories')
+    let count=await LotModel.countDocuments({ user_id: req.tokenData._id });
+    let data = await LotModel.find({ user_id: req.tokenData._id })
       .limit(perPage)
       .skip((page - 1) * perPage)
       // .sort({_id:-1}) like -> order by _id DESC
       .sort({ [sort]: reverse });
-    res.json(data);
-    console.log(data)
+      console.log(data,count);
+    res.json({"data":data,"count":count});
   } catch (err) {
     console.log(err);
     res.status(500).json({ msg: "err", err });
   }
 });
-router.get("/byId/:id",auth,async (req, res) => {
+router.get("/byId/:id",async (req, res) => {
   try {
-    let data = await LotModel.findOne({ _id: req.params.id }).populate('categories');
+    let data = await LotModel.findOne({ _id:req.params.id }).populate('categories')
     res.json(data);
   } catch (err) {
     console.log(err);
@@ -51,8 +63,24 @@ router.get("/byId/:id",auth,async (req, res) => {
 });
 
 router.get("/count", async (req, res) => {
+  let perPage = req.query.perPage || 10;
+  let page = req.query.page || 1;
+  let sort = req.query.sort || "_id";
+  let category = req.query.category ;
+  let reverse = req.query.reverse == "yes" ? 1 : -1;
+  let queryS = req.query.s;
+  let searchReg = new RegExp(queryS, "i")
+  let filter_category = {category_url :category};
+  if(category=="ALL") {
+    filter_category={}
+}
   try {
-    let count = await LotModel.countDocuments({});
+    let count = await LotModel.countDocuments({
+      $and: [
+          { $or: [ filter_category ] },
+          { $or: [ {name: searchReg  }, { info: searchReg } ] }
+      ]
+  } );
     res.json({ count });
   } catch (err) {
     console.log(err);

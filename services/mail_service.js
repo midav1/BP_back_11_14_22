@@ -21,18 +21,34 @@ class MailService {
         await this.transporter.sendMail({
             from: process.env.SMTP_USER,
             to,
-            subject: 'Aсtivition of account  ' + process.env.API_URL,
+            subject: 'Aсtivation/Forget Password of account  ' + process.env.API_URL,
             text: '',
             html:
                 `
                     <div>
-                        <h1>To active account go to link</h1>
+                        <h1>To active account or reset password  go to link</h1>
                         <a href="${link}">
                         ${link}</a>
                     </div>
                 `
         })
     }
+    async sendTempPasswordMail(to, temppassword) {
+        await this.transporter.sendMail({
+            from: process.env.SMTP_USER,
+            to,
+            subject: 'This is your temporary password  ',
+            text: '',
+            html:
+                `
+                    <div>
+                        <h1>This is your temporary password</h1>
+                        ${temppassword}
+                    </div>
+                `
+        })
+    }
+    
 }
 
 module.exports = new MailService();
